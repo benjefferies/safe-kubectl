@@ -1,6 +1,4 @@
-#!/bin/bash
-
-safe-kubectl() {
+safe_kubectl() {
   context=$($KUBECTL_PATH config current-context)
   setopt shwordsplit
   for cluster in $KUBECTL_SAFE_CLUSTERS
@@ -11,8 +9,8 @@ safe-kubectl() {
     fi
   done
 
-  last_kubectl=$(stat -f %m $HOME/.safe-kubectl/context)
-  touch $HOME/.safe-kubectl/context
+  last_kubectl=$(stat -f %m $HOME/.safe_kubectl/context)
+  touch $HOME/.safe_kubectl/context
   epoch_now=$(date +%s)
   seconds_since_last_kubectl=$(($epoch_now - last_kubectl))
 
@@ -44,11 +42,12 @@ safe-kubectl() {
 }
 
 # Initial setup
-mkdir -p $HOME/.safe-kubectl
-if [ ! -f $HOME/.safe-kubectl/context ]; then
-  touch $HOME/.safe-kubectl/context
+mkdir -p $HOME/.safe_kubectl
+if [ ! -f $HOME/.safe_kubectl/context ]; then
+  touch $HOME/.safe_kubectl/context
 fi
 
 # Alias wrapper script
-alias kubectl=safe-kubectl
+alias kubectl=safe_kubectl
 export KUBECTL_PATH=/usr/local/bin/kubectl
+compdef safe_kubectl=kubectl
