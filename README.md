@@ -15,6 +15,7 @@ Plugin to add some safety when running kubectl. When there are kubernetes cluste
 1. Reload or `source $HOME/.zshrc`
 
 ## Customising
-`KUBECTL_PATH` - Set the path where kubectl is
-`KUBECTL_SAFE_CLUSTERS` - Set clusters you want to exclude from safety checks
-`KUBECTL_SAFE_TIME` - Set the safe time you can run a kubectl command within without safety prompt
+
+* `KUBECTL_PATH` - Set the path where kubectl is
+* `KUBECTL_SAFE_CLUSTERS` - Set clusters you want to exclude from safety checks
+* `KUBECTL_SAFE_TIME` - Set the safe time you can run a kubectl command within without safety prompt
