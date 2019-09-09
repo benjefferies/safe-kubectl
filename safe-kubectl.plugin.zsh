@@ -1,4 +1,18 @@
-safe_operations="api-versions cluster-info config describe diff explain get logs version"
+export KUBECTL_PATH=/usr/local/bin/kubectl
+
+if (( $+commands[kubectl] )); then
+    __KUBECTL_COMPLETION_FILE="${ZSH_CACHE_DIR}/kubectl_completion"
+
+    if [[ ! -f $__KUBECTL_COMPLETION_FILE ]]; then
+        kubectl completion zsh >! $__KUBECTL_COMPLETION_FILE
+    fi
+
+    [[ -f $__KUBECTL_COMPLETION_FILE ]] && sed -i '' 's|$(kubectl\ |$('${KUBECTL_PATH}' |g' $__KUBECTL_COMPLETION_FILE && source $__KUBECTL_COMPLETION_FILE
+
+    unset __KUBECTL_COMPLETION_FILE
+fi
+
+safe_operations="completion api-versions cluster-info config describe diff explain get logs version"
 
 safe_kubectl() {
   context=$($KUBECTL_PATH config current-context)
@@ -60,5 +74,4 @@ fi
 
 # Alias wrapper script
 alias kubectl=safe_kubectl
-export KUBECTL_PATH=/usr/local/bin/kubectl
 compdef safe_kubectl=kubectl
