@@ -1,9 +1,20 @@
+safe_operations="api-versions cluster-info config describe diff explain get logs version"
+
 safe_kubectl() {
   context=$($KUBECTL_PATH config current-context)
   setopt shwordsplit
   for cluster in $KUBECTL_SAFE_CLUSTERS
   do
     if [ $cluster = $context ]; then
+      $KUBECTL_PATH $*
+      return
+    fi
+  done
+
+  op=$1
+  for safe_op in $safe_operations
+  do
+    if [ $safe_op = $op ]; then
       $KUBECTL_PATH $*
       return
     fi
