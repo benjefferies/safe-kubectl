@@ -1,5 +1,13 @@
 export KUBECTL_PATH=$(which kubectl)
 
+if uname | grep -q "Darwin"; then
+    __MOD_TIME_FMT="-f %m"
+    __SED_I_CMD="-i ''"
+else
+    __MOD_TIME_FMT="-c %Y"
+    __SED_I_CMD="-i"
+fi
+
 if (( $+commands[kubectl] )); then
     __KUBECTL_COMPLETION_FILE="${ZSH_CACHE_DIR}/kubectl_completion"
 
@@ -7,7 +15,7 @@ if (( $+commands[kubectl] )); then
         kubectl completion zsh >! $__KUBECTL_COMPLETION_FILE
     fi
 
-    [[ -f $__KUBECTL_COMPLETION_FILE ]] && sed -i '' 's|$(kubectl\ |$('${KUBECTL_PATH}' |g' $__KUBECTL_COMPLETION_FILE && source $__KUBECTL_COMPLETION_FILE
+    [[ -f $__KUBECTL_COMPLETION_FILE ]] && sed $__SED_I_CMD 's|$(kubectl\ |$('${KUBECTL_PATH}' |g' $__KUBECTL_COMPLETION_FILE && source $__KUBECTL_COMPLETION_FILE
 
     unset __KUBECTL_COMPLETION_FILE
 fi
@@ -34,7 +42,7 @@ safe_kubectl() {
     fi
   done
 
-  last_kubectl=$(stat -f %m $HOME/.safe_kubectl/context)
+  last_kubectl=$(stat $__MOD_TIME_FMT $HOME/.safe_kubectl/context)
   touch $HOME/.safe_kubectl/context
   epoch_now=$(date +%s)
   seconds_since_last_kubectl=$(($epoch_now - last_kubectl))
