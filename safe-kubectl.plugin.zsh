@@ -1,4 +1,4 @@
-export KUBECTL_PATH=/usr/local/bin/kubectl
+export KUBECTL_PATH=$(which kubectl)
 
 if (( $+commands[kubectl] )); then
     __KUBECTL_COMPLETION_FILE="${ZSH_CACHE_DIR}/kubectl_completion"
