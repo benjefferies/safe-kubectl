@@ -1,10 +1,10 @@
 export KUBECTL_PATH=$(which kubectl)
 
 if uname | grep -q "Darwin"; then
-    __MOD_TIME_FMT="-f %m"
+    export __MOD_TIME_FMT="-f%m"
     __SED_I_CMD="-i ''"
 else
-    __MOD_TIME_FMT="-c %Y"
+    export __MOD_TIME_FMT="-c %Y"
     __SED_I_CMD="-i"
 fi
 
@@ -22,7 +22,7 @@ fi
 
 safe_operations="completion api-versions cluster-info config describe diff explain get logs version"
 
-safe_kubectl() {
+function safe_kubectl() {
   context=$($KUBECTL_PATH config current-context)
   setopt shwordsplit
   for cluster in $KUBECTL_SAFE_CLUSTERS
@@ -42,7 +42,7 @@ safe_kubectl() {
     fi
   done
 
-  last_kubectl=$(stat $__MOD_TIME_FMT $HOME/.safe_kubectl/context)
+  last_kubectl=$(bash -c 'stat $__MOD_TIME_FMT $HOME/.safe_kubectl/context')
   touch $HOME/.safe_kubectl/context
   epoch_now=$(date +%s)
   seconds_since_last_kubectl=$(($epoch_now - last_kubectl))
